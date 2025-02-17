@@ -1,0 +1,43 @@
+name: Scrape Movies
+
+on:
+  schedule:
+    # Runs at midnight UTC every day
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # Allows you to manually trigger the workflow from GitHub UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Python
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      # Run the scraper script
+      - name: Run scraper
+        run: |
+          python scraper.py  # Replace with the actual filename of your script
+          
+      # Upload the generated movie data to GitHub for storage
+      - name: Commit and push updated movie data
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add movies.json
+          git commit -m "Update movie data"
+          git push
