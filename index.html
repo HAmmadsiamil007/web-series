@@ -65,7 +65,7 @@
 
         async function fetchMovies() {
             try {
-                const response = await fetch('webseries.json');
+                const response = await fetch('movies.json');
                 movies = await response.json();
                 displayMovies();
             } catch (error) {
